@@ -16,6 +16,21 @@ function optimize(pattern, options) {
 }
 
 describe('braces - expanded', function() {
+  it("should return true when braces are found", () => {
+    assert.equal(mm.hasBraces("{foo}"), true);
+    assert.equal(mm.hasBraces("foo}"), false);
+    assert.equal(mm.hasBraces("{foo"), false);
+    assert.equal(mm.hasBraces("a{}b"), true);
+    assert.equal(mm.hasBraces("abc {foo} xyz"), true);
+    assert.equal(mm.hasBraces("abc {foo xyz"), false);
+    assert.equal(mm.hasBraces("abc {foo} xyz"), true);
+    assert.equal(mm.hasBraces("abc foo} xyz"), false);
+    assert.equal(mm.hasBraces("abc foo xyz"), false);
+    assert.equal(mm.hasBraces("abc {foo} xyz {bar} pqr"), true);
+    assert.equal(mm.hasBraces("abc {foo xyz {bar} pqr"), true);
+    assert.equal(mm.hasBraces("abc foo} xyz {bar pqr"), false);
+  });
+
   it('should handle extglobs in braces', function() {
     var fixtures = ['a', 'b', 'c', 'd', 'ab', 'ac', 'ad', 'bc', 'cb', 'bc,d', 'c,db', 'c,d', 'd)', '(b|c', '*(b|c', 'b|c', 'b|cc', 'cb|c', 'x(a|b|c)', 'x(a|c)', '(a|b|c)', '(a|c)'];
 

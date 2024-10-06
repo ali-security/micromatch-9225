@@ -19,6 +19,11 @@ var cache = require('./lib/cache');
 var utils = require('./lib/utils');
 var MAX_LENGTH = 1024 * 64;
 
+function hasBraces(v) {
+  var index = v.indexOf("{");
+  return index > -1 && v.indexOf("}", index) > -1;
+};
+
 /**
  * The main function takes a list of strings and one or more
  * glob patterns to use for matching.
@@ -621,7 +626,7 @@ micromatch.braces = function(pattern, options) {
   }
 
   function expand() {
-    if (options && options.nobrace === true || !/\{.*\}/.test(pattern)) {
+    if ((options && options.nobrace === true) || !hasBraces(pattern.toString())) {
       return utils.arrayify(pattern);
     }
     return braces(pattern, options);
@@ -868,6 +873,7 @@ function memoize(type, pattern, options, fn) {
 micromatch.compilers = compilers;
 micromatch.parsers = parsers;
 micromatch.caches = cache.caches;
+micromatch.hasBraces = hasBraces;
 
 /**
  * Expose `micromatch`
